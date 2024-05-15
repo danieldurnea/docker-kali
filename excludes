@@ -1,0 +1,26 @@
+# Drop all man and info pages
+path-exclude=/usr/share/man/*
+path-exclude=/usr/share/info/*
+
+# Drop all translations
+path-exclude=/usr/share/locale/*/LC_MESSAGES/*.mo
+
+# Drop all documentation ...
+path-exclude=/usr/share/doc/*
+
+# Drop all groff
+path-exclude=/usr/share/groff/*
+
+# Drop all lintian
+path-exclude=/usr/share/lintian/*
+path-exclude=/usr/share/linda/*
+
+# ... except copyright files ...
+path-include=/usr/share/doc/*/copyright
+
+# Block non-us locales
+path-exclude=/usr/share/locale/*
+path-include=/usr/share/locale/en*
+
+# ... and Debian changelogs for native & non-native packages
+path-include=/usr/share/doc/*/changelog.*

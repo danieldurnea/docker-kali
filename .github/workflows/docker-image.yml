@@ -1,0 +1,446 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+  schedule: 
+   - cron: '0 18 * * 0'
+
+jobs:
+
+  Upstream:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        KALI_VER:
+        - rolling
+        - bleeding-edge
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: 'phusion/baseimage-docker'
+    - name: Add Kali
+      run: sed -i 's/Debian)/Debian|Kali)/' image/prepare.sh
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Build and push
+      run: >
+        docker buildx build
+        --platform=linux/amd64,linux/arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:upstream
+        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:upstream" )
+        --build-arg BASE_IMAGE=kalilinux/kali-${{ matrix.KALI_VER }}
+        --cache-from type=gha
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:upstream
+        --cache-to type=gha,mode=min
+        --cache-to type=inline
+        --push image
+
+  Base:
+    runs-on: ubuntu-latest
+    needs: Upstream
+    strategy:
+      matrix:
+        KALI_VER:
+        - rolling
+        - bleeding-edge
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Build
+      run: >
+        docker buildx build
+        --platform=linux/amd64,linux/arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:base
+        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:base" )
+        --build-arg KALI_VER=${{ matrix.KALI_VER }}
+        --cache-from type=gha
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:upstream
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:base
+        --cache-to type=gha,mode=min
+        --cache-to type=inline
+        --target base
+        --push .
+
+  Labs:
+    runs-on: ubuntu-latest
+    needs: Base
+    strategy:
+      matrix:
+        KALI_VER:
+        - rolling
+        - bleeding-edge
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Build
+      run: >
+        docker buildx build
+        --platform=linux/amd64,linux/arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:labs
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:exploitable
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:vulnerable
+        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:labs -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:exploitable -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:vulnerable " )
+        --build-arg KALI_VER=${{ matrix.KALI_VER }}
+        --cache-from type=gha
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:base
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:labs
+        --cache-to type=gha,mode=min
+        --cache-to type=inline
+        --target labs
+        --push .
+
+  Desktop:
+    runs-on: ubuntu-latest
+    needs: Base
+    strategy:
+      matrix:
+        KALI_VER:
+        - rolling
+        - bleeding-edge
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Build desktop
+      run: >
+        docker buildx build
+        --platform=linux/amd64,linux/arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:desktop
+        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:desktop" )
+        --build-arg KALI_VER=${{ matrix.KALI_VER }}
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:base
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:desktop
+        --cache-to type=gha,mode=min
+        --cache-to type=inline
+        --target desktop
+        --push .
+    - name: Build Desktop Top10
+      run: >
+        docker buildx build
+        --platform=linux/amd64,linux/arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:latest
+        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:latest" )
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:top10
+        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:top10" )
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:desktop-top10
+        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:desktop-top10" )
+        --build-arg KALI_VER=${{ matrix.KALI_VER }}
+        --cache-from type=gha
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:latest
+        --cache-to type=gha,mode=min
+        --cache-to type=inline
+        --target desktop-top10
+        --push .
+
+  Nethunter:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: Desktop
+    strategy:
+      matrix:
+        KALI_VER:
+        - rolling
+        - bleeding-edge
+        PLATFORM:
+        - amd64
+        - arm64
+    env:
+      TOOL: RUN apt-get install -y kali-linux-nethunter && apt-get clean
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Build Nethunter
+      run: >
+        docker buildx build
+        --platform=linux/${{ matrix.PLATFORM }}
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-nethunter-${{ matrix.platform }}
+        --build-arg KALI_VER=${{ matrix.KALI_VER }}
+        --cache-from type=gha
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-nethunter-${{ matrix.platform }}
+        --cache-to type=inline
+        --target nethunter
+        --push .
+
+  Merge_Nethunter:
+    needs: Nethunter
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Merge Nethunter (rolling)
+      run: >
+        docker buildx imagetools create
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-nethunter-amd64
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-nethunter-arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:nethunter
+    - name: Merge Nethunter (rolling)
+      run: >
+        docker buildx imagetools create
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-nethunter-amd64
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-nethunter-arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:nethunter
+    - name: Merge Nethunter (bleeding-edge)
+      run: >
+        docker buildx imagetools create
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:bleeding-edge-nethunter-amd64
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:bleeding-edge-nethunter-arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:nethunter
+
+  Tools:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: Desktop
+    strategy:
+      fail-fast: false
+      matrix:
+        KALI_VER:
+        - rolling
+        - bleeding-edge
+        TOOL:
+        - 802-11
+        - bluetooth
+        - crypto-stego
+        - database
+        - detect
+        - exploitation
+        - forensics
+        - fuzzing
+        - gpu
+        - hardware
+        - identify
+        - information-gathering
+        - passwords
+        - post-exploitation
+        - protect
+        - recover
+        - reporting
+        - respond
+        - reverse-engineering
+        - rfid
+        - sdr
+        - sniffing-spoofing
+        - social-engineering
+        - voip
+        - vulnerability
+        - web
+        - windows-resources
+        - wireless
+        PLATFORM:
+        - amd64
+        - arm64
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Build
+      run: >
+        docker buildx build
+        --platform=linux/${{ matrix.PLATFORM }}
+        --build-arg KALI_VER=${{ matrix.KALI_VER }}
+        --build-arg TOOL=${{ matrix.TOOL }}
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.platform }}
+        --cache-from type=gha
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:desktop-top10
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.platform }}
+        --cache-to type=inline
+        --target tool
+        --push .
+
+  Merge_Tools:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: Tools
+    strategy:
+      fail-fast: false
+      matrix:
+        TOOL:
+        - crypto-stego
+        - database
+        - detect
+        - exploitation
+        - forensics
+        - fuzzing
+        - gpu
+        - hardware
+        - identify
+        - information-gathering
+        - passwords
+        - post-exploitation
+        - protect
+        - reporting
+        - respond
+        - reverse-engineering
+        - rfid
+        - sniffing-spoofing
+        - social-engineering
+        - voip
+        - vulnerability
+        - web
+        - windows-resources
+        - wireless
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Merge Tools (rolling)
+      run: >
+        docker buildx imagetools create
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-${{ matrix.TOOL }}-amd64
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-${{ matrix.TOOL }}-arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:${{ matrix.TOOL }}
+    - name: Merge Tools (rolling)
+      run: >
+        docker buildx imagetools create
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-${{ matrix.TOOL }}-amd64
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-${{ matrix.TOOL }}-arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:${{ matrix.TOOL }}
+    - name: Merge Tools (bleeding-edge)
+      run: >
+        docker buildx imagetools create
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:bleeding-edge-${{ matrix.TOOL }}-amd64
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:bleeding-edge-${{ matrix.TOOL }}-arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:${{ matrix.TOOL }}
+
+  Headless:
+    needs: Base
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        KALI_VER:
+        - rolling
+        - bleeding-edge
+        PLATFORM:
+          - amd64
+          - arm64
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Build headless
+      run: >
+        docker buildx build
+        --platform=linux/${{ matrix.PLATFORM }}
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-headless-${{ matrix.platform }}
+        --build-arg KALI_VER=${{ matrix.KALI_VER }}
+        --cache-from type=gha
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:base
+        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-headless-${{ matrix.platform }}
+        --cache-to type=inline
+        --target headless
+        --push .
+
+  Merge_Headless:
+    needs: Headless
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Prepare
+      run: docker buildx create --use
+    - name: Merge Headless (rolling)
+      run: >
+        docker buildx imagetools create
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-headless-amd64
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-headless-arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:headless
+    - name: Merge Headless (rolling)
+      run: >
+        docker buildx imagetools create
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-headless-amd64
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:rolling-headless-arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:headless
+    - name: Merge Headless (bleeding-edge)
+      run: >
+        docker buildx imagetools create
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:bleeding-edge-headless-amd64
+        ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:bleeding-edge-headless-arm64
+        -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:headless

@@ -1,0 +1,4 @@
+[submodule "kalitorify"]
+	path = kalitorify
+	url = https://github.com/Amitie10g/kalitorify.git
+	branch = runit

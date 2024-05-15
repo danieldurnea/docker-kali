@@ -1,0 +1,39 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          dvwa
+# Required-Start:    $network $remote_fs $syslog mariadb php8.2-fpm
+# Required-Stop:     $network $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start DVWA at boot time
+# Description:       Enable DVWA service provided by daemon.
+### END INIT INFO
+
+PIDFILE=/run/dvwa.pid
+DAEMON=/usr/sbin/nginx
+DAEMON_ARGS="-c /etc/dvwa/nginx.conf"
+
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+    log_daemon_msg "Starting DVWA service" "dvwa"
+    /usr/share/dvwa/create-database-dvwa
+    start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
+    log_end_msg $?
+    ;;
+  stop)
+    log_daemon_msg "Stopping DVWA service" "dvwa"
+    start-stop-daemon --stop --quiet --pidfile $PIDFILE
+    log_end_msg $?
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+    echo "Usage: /etc/init.d/dvwa {start|stop|restart}"
+    exit 1
+esac
+
+exit 0
