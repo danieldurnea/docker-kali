@@ -30,8 +30,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Build and push
       run: >
         docker buildx build
@@ -63,8 +65,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Build
       run: >
         docker buildx build
@@ -73,8 +77,6 @@ jobs:
         $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:base" )
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
         --cache-from type=gha
-        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:upstream
-        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:base
         --cache-to type=gha,mode=min
         --cache-to type=inline
         --target base
@@ -98,8 +100,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Build
       run: >
         docker buildx build
@@ -110,8 +114,6 @@ jobs:
         $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:labs -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:exploitable -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:vulnerable " )
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
         --cache-from type=gha
-        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:base
-        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:labs
         --cache-to type=gha,mode=min
         --cache-to type=inline
         --target labs
@@ -135,8 +137,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Build desktop
       run: >
         docker buildx build
@@ -162,7 +166,6 @@ jobs:
         $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:desktop-top10" )
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
         --cache-from type=gha
-        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:latest
         --cache-to type=gha,mode=min
         --cache-to type=inline
         --target desktop-top10
@@ -192,8 +195,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Build Nethunter
       run: >
         docker buildx build
@@ -201,7 +206,6 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-nethunter-${{ matrix.platform }}
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
         --cache-from type=gha
-        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-nethunter-${{ matrix.platform }}
         --cache-to type=inline
         --target nethunter
         --push .
@@ -220,8 +224,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Merge Nethunter (rolling)
       run: >
         docker buildx imagetools create
@@ -293,8 +299,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Build
       run: >
         docker buildx build
@@ -303,7 +311,6 @@ jobs:
         --build-arg TOOL=${{ matrix.TOOL }}
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.platform }}
         --cache-from type=gha
-        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:desktop-top10
         --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.platform }}
         --cache-to type=inline
         --target tool
@@ -351,8 +358,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Merge Tools (rolling)
       run: >
         docker buildx imagetools create
@@ -395,8 +404,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Build headless
       run: >
         docker buildx build
@@ -404,7 +415,6 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-headless-${{ matrix.platform }}
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
         --cache-from type=gha
-        --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:base
         --cache-from ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-headless-${{ matrix.platform }}
         --cache-to type=inline
         --target headless
@@ -424,8 +434,10 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Prepare
-      run: docker buildx create --use
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Merge Headless (rolling)
       run: >
         docker buildx imagetools create
