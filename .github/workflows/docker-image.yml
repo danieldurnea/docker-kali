@@ -18,6 +18,8 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
+    permissions:
+      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -47,9 +49,9 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:upstream -t ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
         $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:upstream -t ghcr.io/${{ github.repository_owner }}/kali:upstream" )
         --build-arg BASE_IMAGE=kalilinux/kali-${{ matrix.KALI_VER }}
-        --cache-from type=gha
+        --cache-from type=gha,token=${{ secrets.GITHUB_TOKEN }}
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
-        --cache-to type=gha,mode=min
+        --cache-to type=gha,token=${{ secrets.GITHUB_TOKEN }},mode=min
         --cache-to type=inline
         --push image
 
@@ -61,6 +63,8 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
+    permissions:
+      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -88,10 +92,10 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:base -t ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
         $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:base -t ghcr.io/${{ github.repository_owner }}/kali:base" )
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
-        --cache-from type=gha
+        --cache-from type=gha,token=${{ secrets.GITHUB_TOKEN }}
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
-        --cache-to type=gha,mode=min
+        --cache-to type=gha,token=${{ secrets.GITHUB_TOKEN }},mode=min
         --cache-to type=inline
         --target base
         --push .
@@ -104,6 +108,8 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
+    permissions:
+      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -133,10 +139,10 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:vulnerable -t ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:vulnerable
         $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:labs ghcr.io/${{ github.repository_owner }}/kali:labs -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:exploitable ghcr.io/${{ github.repository_owner }}/kali:exploitable -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:vulnerable ghcr.io/${{ github.repository_owner }}/kali:vulnerable" )
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
-        --cache-from type=gha
+        --cache-from type=gha,token=${{ secrets.GITHUB_TOKEN }}
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:labs
-        --cache-to type=gha,mode=min
+        --cache-to type=gha,token=${{ secrets.GITHUB_TOKEN }},mode=min
         --cache-to type=inline
         --target labs
         --push .
@@ -149,6 +155,8 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
+    permissions:
+      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -176,10 +184,10 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:desktop -t ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop
         $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:desktop -t ghcr.io/${{ github.repository_owner }}/kali:desktop" )
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
-        --cache-from type=gha
+        --cache-from type=gha,token=${{ secrets.GITHUB_TOKEN }}
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop
-        --cache-from type=gha,mode=min
+        --cache-from type=gha,token=${{ secrets.GITHUB_TOKEN }},mode=min
         --cache-to type=inline
         --target desktop
         --push .
@@ -194,7 +202,7 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:desktop-top10 -t ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop-top10
         $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:desktop-top10 -t ghcr.io/${{ github.repository_owner }}/kali:desktop-top10" )
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
-        --cache-from type=gha,mode=min
+        --cache-from type=gha,token=${{ secrets.GITHUB_TOKEN }},mode=min
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
         --cache-to type=inline
         --target desktop-top10
@@ -214,6 +222,8 @@ jobs:
         - arm64
     env:
       TOOL: RUN apt-get install -y kali-linux-nethunter && apt-get clean
+    permissions:
+      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -240,7 +250,7 @@ jobs:
         --platform=linux/${{ matrix.PLATFORM }}
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-nethunter-${{ matrix.platform }} -t ghcr.io/${{ github.repository_owner }}/kali-cache:${{ matrix.KALI_VER }}-nethunter-${{ matrix.platform }}
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
-        --cache-from type=gha
+        --cache-from type=gha,token=${{ secrets.GITHUB_TOKEN }}
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-cache:${{ matrix.KALI_VER }}-nethunter-${{ matrix.platform }}
         --cache-to type=inline
@@ -338,6 +348,8 @@ jobs:
         PLATFORM:
         - amd64
         - arm64
+    permissions:
+      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -365,7 +377,7 @@ jobs:
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
         --build-arg TOOL=${{ matrix.TOOL }}
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.platform }} -t ghcr.io/${{ github.repository_owner }}/kali-cache:${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.platform }}
-        --cache-from type=gha
+        --cache-from type=gha,token=${{ secrets.GITHUB_TOKEN }}
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-cache:${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.platform }}
         --cache-to type=inline
@@ -462,6 +474,10 @@ jobs:
           - amd64
           - arm64
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -488,7 +504,7 @@ jobs:
         --platform=linux/${{ matrix.PLATFORM }}
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache:${{ matrix.KALI_VER }}-headless-${{ matrix.platform }} -t ghcr.io/${{ github.repository_owner }}/kali-cache:${{ matrix.KALI_VER }}-headless-${{ matrix.platform }}
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
-        --cache-from type=gha
+        --cache-from type=gha,token=${{ secrets.GITHUB_TOKEN }}
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-cache:${{ matrix.KALI_VER }}-headless-${{ matrix.platform }}
         --cache-to type=inline
