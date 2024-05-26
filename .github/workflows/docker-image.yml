@@ -171,7 +171,7 @@ jobs:
         docker buildx build
         --platform=linux/amd64,linux/arm64
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:desktop -t ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop
-        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:desktop ghcr.io/${{ github.repository_owner }}/kali:desktop" )
+        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:desktop -t ghcr.io/${{ github.repository_owner }}/kali:desktop" )
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
         --cache-from type=gha
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
