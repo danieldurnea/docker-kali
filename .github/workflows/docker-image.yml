@@ -18,8 +18,6 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
-    permissions:
-      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -63,8 +61,6 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
-    permissions:
-      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -108,8 +104,6 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
-    permissions:
-      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -155,8 +149,6 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
-    permissions:
-      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -222,8 +214,6 @@ jobs:
         - arm64
     env:
       TOOL: RUN apt-get install -y kali-linux-nethunter && apt-get clean
-    permissions:
-      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -348,8 +338,6 @@ jobs:
         PLATFORM:
         - amd64
         - arm64
-    permissions:
-      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -474,10 +462,6 @@ jobs:
           - amd64
           - arm64
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      packages: read/write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
