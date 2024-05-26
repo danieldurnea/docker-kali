@@ -131,7 +131,7 @@ jobs:
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:labs -t ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:labs
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:exploitable -t ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:exploitable
         -t ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}:vulnerable -t ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:vulnerable
-        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:labs ghcr.io/${{ github.repository_owner }}/kali:labs -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:exploitable ghcr.io/${{ github.repository_owner }}/kali:exploitable -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:vulnerable ghcr.io/${{ github.repository_owner }}/kali:vulnerable" )
+        $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:labs ghcr.io/${{ github.repository_owner }}/kali:labs -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:exploitable -t ghcr.io/${{ github.repository_owner }}/kali:exploitable -t ${{ secrets.DOCKERHUB_USERNAME }}/kali:vulnerable ghcr.io/${{ github.repository_owner }}/kali:vulnerable" )
         --build-arg KALI_VER=${{ matrix.KALI_VER }}
         --cache-from type=gha,scope=${{ matrix.service }},token=${{ secrets.GITHUB_TOKEN }}
         --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
