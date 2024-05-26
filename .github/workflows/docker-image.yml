@@ -48,6 +48,7 @@ jobs:
         $( [ ${{ strategy.job-index }} -eq 0 ] && echo "-t ${{ secrets.DOCKERHUB_USERNAME }}/kali:upstream -t ghcr.io/${{ github.repository_owner }}/kali:upstream" )
         --build-arg BASE_IMAGE=kalilinux/kali-${{ matrix.KALI_VER }}
         --cache-from type=gha
+        --cache-from ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
         --cache-to type=gha,mode=min
         --cache-to type=inline
         --push image
