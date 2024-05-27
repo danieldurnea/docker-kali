@@ -643,8 +643,6 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
     - name: Merge Headless (rolling)
-
-    - name: Merge Tools (rolling)
       uses: int128/docker-manifest-create-action@v2
       with:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:headless
