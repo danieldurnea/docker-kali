@@ -46,8 +46,8 @@ jobs:
         images: |
           ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}
-          ${{ strategy.job-index == 0 && secrets.DOCKERHUB_USERNAME + '/kali' || '' }}
-          ${{ strategy.job-index == 0 && ghcr.io/${{ github.repository_owner }}/kali || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}', secrets.DOCKERHUB_USERNAME, 'kali') || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}/{2}', 'ghcr.io', github.repository_owner, 'kali') || '' }}
         tags: |
           upstream
     - name: Build And Push Docker Image
@@ -103,8 +103,8 @@ jobs:
         images: |
           ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}
-          ${{ strategy.job-index == 0 && ${{ secrets.DOCKERHUB_USERNAME }}/kali || '' }}
-          ${{ strategy.job-index == 0 && ghcr.io/${{ github.repository_owner }}/kali || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}', secrets.DOCKERHUB_USERNAME, 'kali') || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}/{2}', 'ghcr.io', github.repository_owner, 'kali') || '' }}
         tags: |
           base
     - name: Build And Push Docker Image
@@ -162,8 +162,8 @@ jobs:
         images: |
           ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}
-          ${{ strategy.job-index == 0 && ${{ secrets.DOCKERHUB_USERNAME }}/kali || '' }}
-          ${{ strategy.job-index == 0 && ghcr.io/${{ github.repository_owner }}/kali || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}', secrets.DOCKERHUB_USERNAME, 'kali') || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}/{2}', 'ghcr.io', github.repository_owner, 'kali') || '' }}
         tags: |
           labs
           exploitable
@@ -222,8 +222,8 @@ jobs:
         images: |
           ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}
-          ${{ strategy.job-index == 0 && ${{ secrets.DOCKERHUB_USERNAME }}/kali || '' }}
-          ${{ strategy.job-index == 0 && ghcr.io/${{ github.repository_owner }}/kali || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}', secrets.DOCKERHUB_USERNAME, 'kali') || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}/{2}', 'ghcr.io', github.repository_owner, 'kali') || '' }}
         tags: |
           desktop
     - name: Set tags metadata
@@ -233,8 +233,8 @@ jobs:
         images: |
           ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}
-          ${{ strategy.job-index == 0 && ${{ secrets.DOCKERHUB_USERNAME }}/kali || '' }}
-          ${{ strategy.job-index == 0 && ghcr.io/${{ github.repository_owner }}/kali || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}', secrets.DOCKERHUB_USERNAME, 'kali') || '' }}
+          ${{ strategy.job-index == 0 && format('{0}/{1}/{2}', 'ghcr.io', github.repository_owner, 'kali') || '' }}
         tags: |
           latest
           top10
