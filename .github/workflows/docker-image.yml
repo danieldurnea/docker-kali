@@ -68,7 +68,7 @@ jobs:
           type=gha
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
         cache-to: |
-          type=gha,mode=min,ignore-error=true
+          type=gha,mode=min
           type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
@@ -127,7 +127,7 @@ jobs:
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
         cache-to: |
-          type=gha,mode=min,ignore-error=true
+          type=gha,mode=min
           type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
@@ -259,7 +259,7 @@ jobs:
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop
         cache-to: |
-          type=gha,mode=min,ignore-error=true
+          type=gha,mode=min
           type=inline
         tags: ${{ steps.meta1.outputs.tags }}
         labels: ${{ steps.meta1.outputs.labels }}
@@ -275,7 +275,7 @@ jobs:
           type=gha
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop-top10
         cache-to: |
-          type=gha,mode=min,ignore-error=true
+          type=gha,mode=min
           type=inline
         tags: ${{ steps.meta2.outputs.tags }}
         labels: ${{ steps.meta2.outputs.labels }}
