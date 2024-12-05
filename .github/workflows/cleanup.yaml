@@ -1,0 +1,40 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+  schedule:
+   - cron: '0 17 * * 0'
+
+permissions:
+  packages: write
+
+jobs:
+
+ Cleanup:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Cleanup Docker cache image
+      run: |
+        curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}
+    - name: Drop untagged packages
+      uses: actions/delete-package-versions@v5
+      with: 
+        package-name: 'kali'
+        package-type: 'container'
+        min-versions-to-keep: 10
+        delete-only-untagged-versions: 'true'
+    - name: Drop untagged packages
+      uses: actions/delete-package-versions@v5
+      with: 
+        package-name: 'kali-rolling'
+        package-type: 'container'
+        min-versions-to-keep: 10
+        delete-only-untagged-versions: 'true'
+    - name: Drop untagged packages
+      uses: actions/delete-package-versions@v5
+      with: 
+        package-name: 'kali-bleeding-edge'
+        package-type: 'container'
+        min-versions-to-keep: 10
+        delete-only-untagged-versions: 'true'
