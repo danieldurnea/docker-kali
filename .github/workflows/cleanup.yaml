@@ -1,4 +1,4 @@
-name: Cleanup kali-cache Docker repository
+name: Cleanup Docker repositories
 on:
   workflow_dispatch:
   schedule:
