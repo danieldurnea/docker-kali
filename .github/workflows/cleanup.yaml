@@ -16,21 +16,18 @@ jobs:
       with: 
         package-name: 'kali'
         package-type: 'container'
-        min-versions-to-keep: 3
         delete-only-untagged-versions: 'true'
     - name: Drop untagged packages
       uses: actions/delete-package-versions@v5
       with: 
         package-name: 'kali-rolling'
         package-type: 'container'
-        min-versions-to-keep: 3
         delete-only-untagged-versions: 'true'
     - name: Drop untagged packages
       uses: actions/delete-package-versions@v5
       with: 
         package-name: 'kali-bleeding-edge'
         package-type: 'container'
-        min-versions-to-keep: 3
         delete-only-untagged-versions: 'true'
     - name: Cleanup Docker cache image
       run: |
