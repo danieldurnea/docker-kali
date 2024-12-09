@@ -15,6 +15,7 @@ permissions:
   packages: write
 
 jobs:
+
   Upstream:
     runs-on: ubuntu-latest
     strategy:
@@ -318,7 +319,6 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache
           ghcr.io/${{ github.repository_owner }}/kali-cache
         tags: |
           ${{ matrix.KALI_VER }}-nethunter-${{ matrix.PLATFORM }}
@@ -367,15 +367,9 @@ jobs:
     - name: Merge Nethunter (rolling)
       uses: int128/docker-manifest-create-action@v2
       with:
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:nethunter
-        push: true
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-nethunter-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-nethunter-arm64
-    - name: Merge Nethunter (rolling)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: ghcr.io/${{ github.repository_owner }}/kali-rolling:nethunter
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:nethunter
+          ghcr.io/${{ github.repository_owner }}/kali-rolling:nethunter
         push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-nethunter-amd64
@@ -383,15 +377,9 @@ jobs:
     - name: Merge Nethunter (bleeding-edge)
       uses: int128/docker-manifest-create-action@v2
       with:
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:nethunter
-        push: true
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-nethunter-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-nethunter-arm64
-    - name: Merge Nethunter (bleeding-edge)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:nethunter
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:nethunter
+          ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:nethunter
         push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-nethunter-amd64
@@ -464,7 +452,6 @@ jobs:
       id: meta
       with:
         images: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache
           ghcr.io/${{ github.repository_owner }}/kali-cache
         tags: |
           ${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.platform }}
@@ -541,31 +528,19 @@ jobs:
     - name: Merge Tools (rolling)
       uses: int128/docker-manifest-create-action@v2
       with:
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:${{ matrix.TOOL }}
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:${{ matrix.TOOL }}
+          ghcr.io/${{ github.repository_owner }}/kali-rolling:${{ matrix.TOOL }}
         push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-${{ matrix.TOOL }}-amd64
           ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-${{ matrix.TOOL }}-arm64
-    - name: Merge Tools (rolling)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: ghcr.io/${{ github.repository_owner }}/kali-rolling:${{ matrix.TOOL }}
-        push: true
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-${{ matrix.TOOL }}-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-${{ matrix.TOOL }}-amd64
     - name: Merge Tools (bleeding-edge)
       uses: int128/docker-manifest-create-action@v2
       with:
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:${{ matrix.TOOL }}
-        push: true
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-${{ matrix.TOOL }}-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-${{ matrix.TOOL }}-arm64
-    - name: Merge Tools (bleeding-edge)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:${{ matrix.TOOL }}
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:${{ matrix.TOOL }}
+          ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:${{ matrix.TOOL }}
         push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-${{ matrix.TOOL }}-amd64
@@ -659,15 +634,9 @@ jobs:
     - name: Merge Headless (rolling)
       uses: int128/docker-manifest-create-action@v2
       with:
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:headless
-        push: true
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-headless-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-headless-arm64
-    - name: Merge Tools (rolling)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: ghcr.io/${{ github.repository_owner }}/kali-rolling:headless
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:headless
+          ghcr.io/${{ github.repository_owner }}/kali-rolling:headless
         push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-headless-amd64
@@ -675,15 +644,9 @@ jobs:
     - name: Merge Tools (bleeding-edge)
       uses: int128/docker-manifest-create-action@v2
       with:
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:headless
-        push: true
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-arm64
-    - name: Merge Tools (bleeding-edge)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:headless
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:headless
+          ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:headless
         push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-amd64
