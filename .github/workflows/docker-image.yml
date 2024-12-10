@@ -19,6 +19,7 @@ jobs:
   Upstream:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         KALI_VER:
         - rolling
@@ -79,6 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Upstream
     strategy:
+      fail-fast: false
       matrix:
         KALI_VER:
         - rolling
@@ -138,6 +140,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Base
     strategy:
+      fail-fast: false
       matrix:
         KALI_VER:
         - rolling
@@ -198,6 +201,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Base
     strategy:
+      fail-fast: false
       matrix:
         KALI_VER:
         - rolling
@@ -284,9 +288,9 @@ jobs:
 
   Nethunter:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: Desktop
     strategy:
+      fail-fast: false
       matrix:
         KALI_VER:
         - rolling
@@ -343,7 +347,6 @@ jobs:
   Merge_Nethunter:
     needs: Nethunter
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -387,7 +390,6 @@ jobs:
 
   Tools:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: Desktop
     strategy:
       fail-fast: false
@@ -475,7 +477,6 @@ jobs:
 
   Merge_Tools:
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: Tools
     strategy:
       fail-fast: false
@@ -548,7 +549,6 @@ jobs:
 
   Headless:
     needs: Base
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
@@ -609,7 +609,6 @@ jobs:
 
   Merge_Headless:
     needs: Headless
-    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -657,7 +656,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Cleanup Docker cache image
-      if: ${{ failure() }}
       run: |
         curl -X DELETE -H "Authorization: token ${{ secrets.PACKAGE_DELETE_TOKEN }}" \
           https://api.github.com/user/packages/container/kali-cache
