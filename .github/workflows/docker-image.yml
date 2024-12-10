@@ -653,7 +653,7 @@ jobs:
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-arm64
 
   Cleanup:
-    needs: [Merge_Nethunter, Merge_Tools, Merge_Headless]
+    needs: [Desktop, Labs, Merge_Nethunter, Merge_Tools, Merge_Headless]
     runs-on: ubuntu-latest
     steps:
     - name: Cleanup Docker cache image
