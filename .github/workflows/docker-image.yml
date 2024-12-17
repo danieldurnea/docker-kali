@@ -56,7 +56,6 @@ jobs:
       with:
         tags: |
           ghcr.io/${{ github.repository_owner }}/binfmt
-        push: true
         sources: |
           tonistiigi/binfmt@${{ env.AMD64_DIGEST }}
           tonistiigi/binfmt@${{ env.ARM64_DIGEST }}
@@ -103,6 +102,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -175,6 +175,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -249,6 +250,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -324,6 +326,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -430,6 +433,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -493,6 +497,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -508,7 +513,6 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:nethunter
           ghcr.io/${{ github.repository_owner }}/kali-rolling:nethunter
-        push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-nethunter-amd64
           ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-nethunter-arm64
@@ -518,7 +522,6 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:nethunter
           ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:nethunter
-        push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-nethunter-amd64
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-nethunter-arm64
@@ -589,6 +592,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -680,6 +684,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -747,6 +752,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -812,6 +818,7 @@ jobs:
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
+        push: false
         tags: |
           tonistiigi/binfmt
         sources: |
@@ -827,7 +834,6 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:headless
           ghcr.io/${{ github.repository_owner }}/kali-rolling:headless
-        push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-headless-amd64
           ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-headless-arm64
@@ -837,7 +843,6 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:headless
           ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:headless
-        push: true
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-amd64
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-arm64
