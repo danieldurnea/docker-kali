@@ -16,8 +16,6 @@ permissions:
 
 jobs:
   binfmt-to-ghcr:
-    env:
-      2AAA: "BBB"
     runs-on: ubuntu-latest
     steps:
     - name: Login to Docker Hub
