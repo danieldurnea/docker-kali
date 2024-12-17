@@ -95,7 +95,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Get digests from ghcr.io/<owner>/binfmt
       run: |
-        MANIFEST=$(docker manifest inspect ghcr.io/${{ github.repository_owner }}/binfmt
+        MANIFEST=$(docker manifest inspect ghcr.io/${{ github.repository_owner }}/binfmt)
         AMD64_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "amd64") | .digest')
         ARM64_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "arm64") | .digest')
         echo "GHCR_AMD64_DIGEST=$AMD64_DIGEST" >> $GITHUB_ENV
