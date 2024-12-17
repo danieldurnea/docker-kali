@@ -40,6 +40,8 @@ jobs:
         PPC64LE_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "ppc64le") | .digest')
         RISCV64_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "riscv64") | .digest')
         S390X_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "s390x") | .digest')
+
+        echo $?
         
         echo "I386_DIGEST=$I386_DIGEST" >> $GITHUB_ENV
         echo "AMD64_DIGEST=$AMD64_DIGEST" >> $GITHUB_ENV
