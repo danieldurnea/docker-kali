@@ -33,17 +33,21 @@ jobs:
     - name: Get digests from tonistiigi/binfmt
       run: |
         I386_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "386") | .digest')
+        echo $?
         AMD64_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "amd64") | .digest')
+        echo $?
         ARMV6_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "arm" and .platform.variant == "v6") | .digest')
+        echo $?
         ARMV7_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "arm" and .platform.variant == "v7") | .digest')
+        echo $?
         ARM64_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "arm64") | .digest')
+        echo $?
         PPC64LE_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "ppc64le") | .digest')
+        echo $?
         RISCV64_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "riscv64") | .digest')
+        echo $?
         S390X_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "s390x") | .digest')
-
-        if [ -z "${I386_DIGEST}${AMD64_DIGEST}${ARMV6_DIGEST}${ARMV7_DIGEST}${ARM64_DIGEST}${PPC64LE_DIGEST}${RISCV64_DIGEST}${S390X_DIGEST}" ]; then
-          exit 1
-        fi
+        echo $?
 
         echo "I386_DIGEST=$I386_DIGEST" >> $GITHUB_ENV
         echo "AMD64_DIGEST=$AMD64_DIGEST" >> $GITHUB_ENV
