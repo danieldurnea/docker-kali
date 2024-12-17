@@ -32,7 +32,7 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Get digests from tonistiigi/binfmt
       run: |
-        386_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "386") | .digest')
+        I386_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "386") | .digest')
         AMD64_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "amd64") | .digest')
         ARMV6_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "arm" and .platform.variant == "v6") | .digest')
         ARMV7_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "arm" and .platform.variant == "v7") | .digest')
@@ -41,7 +41,7 @@ jobs:
         RISCV64_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "riscv64") | .digest')
         S390X_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "s390x") | .digest')
         
-        echo "386_DIGEST=$386_DIGEST" >> $GITHUB_ENV
+        echo "I386_DIGEST=$I386_DIGEST" >> $GITHUB_ENV
         echo "AMD64_DIGEST=$AMD64_DIGEST" >> $GITHUB_ENV
         echo "ARMV6_DIGEST=$ARMV6_DIGEST" >> $GITHUB_ENV
         echo "ARMV7_DIGEST=$ARMV7_DIGEST" >> $GITHUB_ENV
