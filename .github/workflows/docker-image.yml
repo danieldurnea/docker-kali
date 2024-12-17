@@ -97,18 +97,19 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Get digests from ghcr.io/<owner>/binfmt
       run: |
-        AMD64_DIGEST=$(docker manifest inspect ghcr.io/${{ github.repository_owner }}/binfmt | jq -r '.manifests[] | select(.platform.architecture == "amd64") | .digest')
-        ARM64_DIGEST=$(docker manifest inspect ghcr.io/${{ github.repository_owner }}/binfmt | jq -r '.manifests[] | select(.platform.architecture == "arm64") | .digest')
-        echo "AMD64_DIGEST=$AMD64_DIGEST" >> $GITHUB_ENV
-        echo "ARM64_DIGEST=$ARM64_DIGEST" >> $GITHUB_ENV
+        MANIFEST=$(docker manifest inspect ghcr.io/${{ github.repository_owner }}/binfmt
+        AMD64_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "amd64") | .digest')
+        ARM64_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "arm64") | .digest')
+        echo "GHCR_AMD64_DIGEST=$AMD64_DIGEST" >> $GITHUB_ENV
+        echo "GHCR_ARM64_DIGEST=$ARM64_DIGEST" >> $GITHUB_ENV
     - name: Pull binfmt from ghcr.io
       uses: int128/docker-manifest-create-action@v2
       with:
         tags: |
           tonistiigi/binfmt
         sources: |
-          ghcr.io/${{ github.repository_owner }}/binfmt@${{ env.AMD64_DIGEST }}
-          ghcr.io/${{ github.repository_owner }}/binfmt@${{ env.ARM64_DIGEST }}
+          ghcr.io/${{ github.repository_owner }}/binfmt@${{ env.GHCR_AMD64_DIGEST }}
+          ghcr.io/${{ github.repository_owner }}/binfmt@${{ env.GHCR_ARM64_DIGEST }}
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
     - name: Set up Docker Buildx
