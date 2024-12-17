@@ -15,8 +15,9 @@ permissions:
   packages: write
 
 jobs:
-
   binfmt-to-ghcr:
+    env:
+      2AAA: "BBB"
     runs-on: ubuntu-latest
     steps:
     - name: Login to Docker Hub
@@ -32,31 +33,26 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Get digests from tonistiigi/binfmt
       run: |
-        I386_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "386") | .digest')
-        echo $?
-        AMD64_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "amd64") | .digest')
-        echo $?
-        ARMV6_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "arm" and .platform.variant == "v6") | .digest')
-        echo $?
-        ARMV7_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "arm" and .platform.variant == "v7") | .digest')
-        echo $?
-        ARM64_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "arm64") | .digest')
-        echo $?
-        PPC64LE_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "ppc64le") | .digest')
-        echo $?
-        RISCV64_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "riscv64") | .digest')
-        echo $?
-        S390X_DIGEST=$(docker manifest inspect tonistiigi/binfmt | jq -r '.manifests[] | select(.platform.architecture == "s390x") | .digest')
-        echo $?
+        MANIFEST=$(docker manifest inspect tonistiigi/binfmt)
+        [ $? -ne 0 ] && exit $?
 
-        echo "I386_DIGEST=$I386_DIGEST" >> $GITHUB_ENV
-        echo "AMD64_DIGEST=$AMD64_DIGEST" >> $GITHUB_ENV
-        echo "ARMV6_DIGEST=$ARMV6_DIGEST" >> $GITHUB_ENV
-        echo "ARMV7_DIGEST=$ARMV7_DIGEST" >> $GITHUB_ENV
-        echo "ARM64_DIGEST=$ARM64_DIGEST" >> $GITHUB_ENV
-        echo "PPC64LE_DIGEST=$PPC64LE_DIGEST" >> $GITHUB_ENV
-        echo "RISCV64_DIGEST=$RISCV64_DIGEST" >> $GITHUB_ENV
-        echo "S390X_DIGEST=$S390X_DIGEST" >> $GITHUB_ENV
+        I386_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "386") | .digest')
+        AMD64_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "amd64") | .digest')
+        ARMV6_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "arm" and .platform.variant == "v6") | .digest')
+        ARMV7_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "arm" and .platform.variant == "v7") | .digest')
+        ARM64_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "arm64") | .digest')
+        PPC64LE_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "ppc64le") | .digest')
+        RISCV64_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "riscv64") | .digest')
+        S390X_DIGEST=$(echo $MANIFEST | jq -r '.manifests[] | select(.platform.architecture == "s390x") | .digest')
+
+        [ -n "$I386_DIGEST" ] && echo "I386_DIGEST=$I386_DIGEST" >> $GITHUB_ENV
+        [ -n "$AMD64_DIGEST" ] && echo "AMD64_DIGEST=$AMD64_DIGEST" >> $GITHUB_ENV
+        [ -n "$ARMV6_DIGEST" ] && echo "ARMV6_DIGEST=$ARMV6_DIGEST" >> $GITHUB_ENV
+        [ -n "$ARMV7_DIGEST" ] && echo "ARMV7_DIGEST=$ARMV7_DIGEST" >> $GITHUB_ENV
+        [ -n "$ARM64_DIGEST" ] && echo "ARM64_DIGEST=$ARM64_DIGEST" >> $GITHUB_ENV
+        [ -n "$PPC64LE_DIGEST" ] && echo "PPC64LE_DIGEST=$PPC64LE_DIGEST" >> $GITHUB_ENV
+        [ -n "$RISCV64_DIGEST" ] && echo "RISCV64_DIGEST=$RISCV64_DIGEST" >> $GITHUB_ENV
+        [ -n "$S390X_DIGEST" ] && echo "S390X_DIGEST=$S390X_DIGEST" >> $GITHUB_ENV
 
     - name: Push binfmt to ghcr.io
       uses: int128/docker-manifest-create-action@v2
