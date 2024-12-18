@@ -44,6 +44,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Set tags metadata
       uses: docker/metadata-action@v5
       id: meta
@@ -104,6 +107,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Set tags metadata
       uses: docker/metadata-action@v5
       id: meta
@@ -166,6 +172,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Set tags metadata
       uses: docker/metadata-action@v5
       id: meta
@@ -229,6 +238,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Set tags metadata
       uses: docker/metadata-action@v5
       id: meta1
@@ -323,6 +335,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Set tags metadata
       id: meta
       uses: docker/metadata-action@v5
@@ -374,6 +389,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Merge Nethunter (rolling)
       uses: int128/docker-manifest-create-action@v2
       with:
@@ -456,6 +474,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Set tags metadata
       uses: docker/metadata-action@v5
       id: meta
@@ -535,6 +556,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Merge Tools (rolling)
       uses: int128/docker-manifest-create-action@v2
       with:
@@ -590,6 +614,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Set tags metadata
       id: meta
       uses: docker/metadata-action@v5
@@ -643,6 +670,9 @@ jobs:
         image: ghcr.io/amitie10g/binfmt:latest
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=ghcr.io/amitie10g/buildkit:master
     - name: Merge Headless (rolling)
       uses: int128/docker-manifest-create-action@v2
       with:
