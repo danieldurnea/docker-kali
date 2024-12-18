@@ -108,9 +108,9 @@ Edit the Dockerfile to fit your needs.
 
 ## Licensing
 
-* Everything in the GitHub repo (excluding submodules like Kalitorify) is released into the Public domain (the Unlicense)
+* Everything in this repository (excluding submodules) is released into the Public domain (the Unlicense)
 * Kalitorify is licensed under the GNU General Public License v3.0
-* The software built into the container images are released under their respective licenses
+* The software built into the container images are subjected to their respective licenses terms
 
 ## Related projects
 
