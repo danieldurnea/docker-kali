@@ -1,8 +1,6 @@
 name: Cleanup Docker repositories
 on:
   workflow_dispatch:
-  schedule:
-   - cron: '0 17 * * 0'
 
 permissions:
   packages: write
