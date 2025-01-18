@@ -67,9 +67,6 @@ jobs:
         build-args: |
           BASE_IMAGE=kalilinux/kali-${{ matrix.KALI_VER }}
         platforms: linux/amd64,linux/arm64
-        cache-from: |
-          type=gha
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
         cache-to: |
           type=gha,mode=min,ignore-error=true
           type=inline
@@ -134,7 +131,6 @@ jobs:
         cache-from: |
           type=gha
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
         cache-to: |
           type=gha,mode=min,ignore-error=true
           type=inline
@@ -201,7 +197,6 @@ jobs:
         cache-from: |
           type=gha
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:labs
         cache-to: |
           type=inline
         tags: ${{ steps.meta.outputs.tags }}
@@ -294,7 +289,7 @@ jobs:
         platforms: linux/amd64,linux/arm64
         cache-from: |
           type=gha
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop-top10
+          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop
         cache-to: |
           type=gha,mode=min,ignore-error=true
           type=inline
@@ -358,7 +353,6 @@ jobs:
         cache-from: |
           type=gha
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
-          ghcr.io/${{ github.repository_owner }}/kali-cache:${{ matrix.KALI_VER }}-nethunter-${{ matrix.PLATFORM }}
         cache-to: |
           type=inline
         tags: ${{ steps.meta.outputs.tags }}
@@ -497,7 +491,6 @@ jobs:
         cache-from: |
           type=gha
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
-          ghcr.io/${{ github.repository_owner }}/kali-cache:${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.PLATFORM }}
         cache-to: |
           type=inline
         tags: ${{ steps.meta.outputs.tags }}
@@ -639,7 +632,6 @@ jobs:
         cache-from: |
           type=gha
           ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
-          ghcr.io/${{ github.repository_owner }}/kali-cache:${{ matrix.KALI_VER }}-headless-${{ matrix.PLATFORM }}
         cache-to: |
           type=inline
         tags: ${{ steps.meta.outputs.tags }}
