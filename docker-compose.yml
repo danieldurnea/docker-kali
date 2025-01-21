@@ -1,7 +1,7 @@
 services:
   desktop:
     container_name: desktop
-    image: docker.io/amitie10g/kali-rolling:latest
+    image: ghcr.io/amitie10g/kali-rolling:latest
     restart: always
     ports:
       - 3389:3389
@@ -11,5 +11,5 @@ services:
 
   vulnerable-webapps:
     container_name: vulnerable
-    image: docker.io/amitie10g/kali-rolling:labs
+    image: ghcr.io/amitie10g/kali-rolling:labs
     restart: always
