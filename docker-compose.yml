@@ -3,6 +3,9 @@ services:
     container_name: desktop
     image: ghcr.io/amitie10g/kali-rolling:latest
     restart: always
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     ports:
       - 3389:3389
     volumes:
@@ -13,3 +16,5 @@ services:
     container_name: vulnerable
     image: ghcr.io/amitie10g/kali-rolling:labs
     restart: always
+    ports:
+      - 38080:80
