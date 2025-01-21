@@ -17,5 +17,5 @@ services:
     image: ghcr.io/amitie10g/kali-rolling:labs
     restart: always
     ports:
-      - 38080:80
-      - 38443:443
+      - 42000:42000
+      - 42001:42001
