@@ -7,7 +7,7 @@ services:
       - NET_ADMIN
       - NET_RAW
     ports:
-      - 3389:3389
+      - 33389:3389
     volumes:
       - ./kali/kali:/home/kali
       - ./kali/root:/root
@@ -18,3 +18,4 @@ services:
     restart: always
     ports:
       - 38080:80
+      - 38443:443
