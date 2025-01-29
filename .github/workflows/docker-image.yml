@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   Upstream:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -72,7 +72,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
 
   Base:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: Upstream
     strategy:
       fail-fast: false
@@ -132,7 +132,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
 
   Labs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: Base
     strategy:
       fail-fast: false
@@ -194,7 +194,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
 
   Desktop:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: Base
     strategy:
       fail-fast: false
@@ -278,7 +278,7 @@ jobs:
         labels: ${{ steps.meta2.outputs.labels }}
 
   Nethunter:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: Desktop
     strategy:
       fail-fast: false
@@ -338,7 +338,7 @@ jobs:
 
   Merge_Nethunter:
     needs: Nethunter
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -384,7 +384,7 @@ jobs:
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-nethunter-arm64
 
   Tools:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: Desktop
     strategy:
       fail-fast: false
@@ -472,7 +472,7 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
 
   Merge_Tools:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: Tools
     strategy:
       fail-fast: false
@@ -559,7 +559,7 @@ jobs:
         PLATFORM:
           - amd64
           - arm64
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -611,7 +611,7 @@ jobs:
 
   Merge_Headless:
     needs: Headless
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -658,7 +658,7 @@ jobs:
 
   Cleanup:
     needs: [Desktop, Labs, Merge_Nethunter, Merge_Tools, Merge_Headless]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - name: Cleanup Docker cache image
       run: |
