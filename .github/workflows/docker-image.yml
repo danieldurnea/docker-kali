@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   workflow_dispatch:
   schedule:
-   - cron: '0 21 * * 0'
+   - cron: '1 12 * * 0'
 
 permissions:
   actions:  write
@@ -67,9 +67,7 @@ jobs:
         build-args: |
           BASE_IMAGE=kalilinux/kali-${{ matrix.KALI_VER }}
         platforms: linux/amd64,linux/arm64
-        cache-to: |
-          type=gha,mode=min,ignore-error=true
-          type=inline
+        cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
@@ -128,12 +126,8 @@ jobs:
           KALI_VER=${{ matrix.KALI_VER }}
         target: base
         platforms: linux/amd64,linux/arm64
-        cache-from: |
-          type=gha
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
-        cache-to: |
-          type=gha,mode=min,ignore-error=true
-          type=inline
+        cache-from: ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:upstream
+        cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
@@ -194,11 +188,8 @@ jobs:
           KALI_VER=${{ matrix.KALI_VER }}
         target: labs
         platforms: linux/amd64,linux/arm64
-        cache-from: |
-          type=gha
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
-        cache-to: |
-          type=inline
+        cache-from: ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
+        cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
@@ -270,13 +261,8 @@ jobs:
           KALI_VER=${{ matrix.KALI_VER }}
         target: desktop
         platforms: linux/amd64,linux/arm64
-        cache-from: |
-          type=gha
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop
-        cache-to: |
-          type=gha,mode=min,ignore-error=true
-          type=inline
+        cache-from: ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
+        cache-to: type=inline
         tags: ${{ steps.meta1.outputs.tags }}
         labels: ${{ steps.meta1.outputs.labels }}
     - name: Build And Push Docker Image
@@ -287,12 +273,7 @@ jobs:
         context: .
         target: desktop-top10
         platforms: linux/amd64,linux/arm64
-        cache-from: |
-          type=gha
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:desktop
-        cache-to: |
-          type=gha,mode=min,ignore-error=true
-          type=inline
+        cache-to: type=inline
         tags: ${{ steps.meta2.outputs.tags }}
         labels: ${{ steps.meta2.outputs.labels }}
 
@@ -350,11 +331,8 @@ jobs:
           KALI_VER=${{ matrix.KALI_VER }}
         target: nethunter
         platforms: linux/${{ matrix.PLATFORM }}
-        cache-from: |
-          type=gha
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
-        cache-to: |
-          type=inline
+        cache-from: ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
+        cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
@@ -488,11 +466,8 @@ jobs:
           KALI_VER=${{ matrix.KALI_VER }}
         target: tool
         platforms: linux/${{ matrix.PLATFORM }}
-        cache-from: |
-          type=gha
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
-        cache-to: |
-          type=inline
+        cache-from: ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
+        cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
@@ -629,11 +604,8 @@ jobs:
           KALI_VER=${{ matrix.KALI_VER }}
         target: headless
         platforms: linux/${{ matrix.PLATFORM }}
-        cache-from: |
-          type=gha
-          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
-        cache-to: |
-          type=inline
+        cache-from: ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
+        cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
