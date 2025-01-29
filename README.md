@@ -1,6 +1,8 @@
 # Kali Linux plus Kalitorify on Docker image (WIP)
 This is a somewhat customised set of Docker images of Kali Linux, for both platforms ``amd64`` (Docker Desktop on Windows, cloud, etc.) and ``arm64`` (Raspberry Pi, Apple Silicon Mac, etc.), and two flavors, [``kali-rolling``](https://hub.docker.com/r/amitie10g/kali-rolling) (``kali`` is the same image) and [``kali-bleeding-edge``](https://hub.docker.com/r/amitie10g/kali-bleeding-edge). Out-of-the-box tools for all needs!
 
+Images are pushed weekly, monday at 12:00 UTC, leaving a margin for pushing images from upstream and update to the apt repository.
+
 ## Tags
 
 * ``upstream`` the base image built with the [Phusion's base image](https://github.com/phusion/baseimage-docker) project modifications
