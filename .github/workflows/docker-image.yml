@@ -21,12 +21,13 @@ jobs:
         - bleeding-edge
     steps:
     - name: Maximize build space
-      uses: easimon/maximize-build-space@master
+      uses: AdityaGarg8/remove-unwanted-software@v4.1
       with:
         remove-dotnet: true
         remove-android: true
         remove-haskell: true
         remove-codeql: true
+        remove-large-packages: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -89,12 +90,13 @@ jobs:
         - bleeding-edge
     steps:
     - name: Maximize build space
-      uses: easimon/maximize-build-space@master
+      uses: AdityaGarg8/remove-unwanted-software@v4.1
       with:
         remove-dotnet: true
         remove-android: true
         remove-haskell: true
         remove-codeql: true
+        remove-large-packages: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -156,12 +158,13 @@ jobs:
         - bleeding-edge
     steps:
     - name: Maximize build space
-      uses: easimon/maximize-build-space@master
+      uses: AdityaGarg8/remove-unwanted-software@v4.1
       with:
         remove-dotnet: true
         remove-android: true
         remove-haskell: true
         remove-codeql: true
+        remove-large-packages: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -225,12 +228,13 @@ jobs:
         - bleeding-edge
     steps:
     - name: Maximize build space
-      uses: easimon/maximize-build-space@master
+      uses: AdityaGarg8/remove-unwanted-software@v4.1
       with:
         remove-dotnet: true
         remove-android: true
         remove-haskell: true
         remove-codeql: true
+        remove-large-packages: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -319,12 +323,13 @@ jobs:
         - arm64
     steps:
     - name: Maximize build space
-      uses: easimon/maximize-build-space@master
+      uses: AdityaGarg8/remove-unwanted-software@v4.1
       with:
         remove-dotnet: true
         remove-android: true
         remove-haskell: true
         remove-codeql: true
+        remove-large-packages: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -461,12 +466,13 @@ jobs:
         - arm64
     steps:
     - name: Maximize build space
-      uses: easimon/maximize-build-space@master
+      uses: AdityaGarg8/remove-unwanted-software@v4.1
       with:
         remove-dotnet: true
         remove-android: true
         remove-haskell: true
         remove-codeql: true
+        remove-large-packages: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -604,12 +610,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Maximize build space
-      uses: easimon/maximize-build-space@master
+      uses: AdityaGarg8/remove-unwanted-software@v4.1
       with:
         remove-dotnet: true
         remove-android: true
         remove-haskell: true
         remove-codeql: true
+        remove-large-packages: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
