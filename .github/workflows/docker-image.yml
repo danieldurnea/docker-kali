@@ -20,6 +20,13 @@ jobs:
         - rolling
         - bleeding-edge
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: true
+        remove-android: true
+        remove-haskell: true
+        remove-codeql: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -81,6 +88,13 @@ jobs:
         - rolling
         - bleeding-edge
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: true
+        remove-android: true
+        remove-haskell: true
+        remove-codeql: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -141,6 +155,13 @@ jobs:
         - rolling
         - bleeding-edge
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: true
+        remove-android: true
+        remove-haskell: true
+        remove-codeql: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -203,6 +224,13 @@ jobs:
         - rolling
         - bleeding-edge
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: true
+        remove-android: true
+        remove-haskell: true
+        remove-codeql: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -290,6 +318,13 @@ jobs:
         - amd64
         - arm64
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: true
+        remove-android: true
+        remove-haskell: true
+        remove-codeql: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -425,6 +460,13 @@ jobs:
         - amd64
         - arm64
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: true
+        remove-android: true
+        remove-haskell: true
+        remove-codeql: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
@@ -561,6 +603,13 @@ jobs:
           - arm64
     runs-on: ubuntu-22.04
     steps:
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: true
+        remove-android: true
+        remove-haskell: true
+        remove-codeql: true
     - name: Checkout
       uses: actions/checkout@v4
       with:
