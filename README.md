@@ -3,6 +3,8 @@ This is a somewhat customised set of Docker images of Kali Linux, for both platf
 
 Images are pushed weekly, monday at 12:00 UTC, leaving a margin for pushing images from upstream and update to the apt repository.
 
+[![Docker Image CI](https://github.com/amitie10g/docker-kali/actions/workflows/docker-image.yml/badge.svg)](https://github.com/amitie10g/docker-kali/actions/workflows/docker-image.yml)
+
 ## Tags
 
 * ``upstream`` the base image built with the [Phusion's base image](https://github.com/phusion/baseimage-docker) project modifications
