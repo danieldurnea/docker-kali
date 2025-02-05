@@ -375,6 +375,10 @@ jobs:
         cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+    - name: Check space available
+      run: |
+        df -h .
+        df -h /var/lib/docker
 
   Merge_Nethunter:
     needs: Nethunter
@@ -518,6 +522,10 @@ jobs:
         cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+    - name: Check space available
+      run: |
+        df -h .
+        df -h /var/lib/docker
 
   Merge_Tools:
     runs-on: ubuntu-22.04
