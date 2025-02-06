@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   workflow_dispatch:
   schedule:
-   - cron: '0 12 * * 1'
+   - cron: '0 4 * * 1'
 
 permissions:
   actions:  write
@@ -373,10 +373,6 @@ jobs:
         cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-    - name: Check space available
-      run: |
-        df -h .
-        df -h /var/lib/docker
 
   Tools:
     runs-on: ubuntu-22.04
@@ -471,10 +467,6 @@ jobs:
         cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-    - name: Check space available
-      run: |
-        df -h .
-        df -h /var/lib/docker
 
   Headless:
     needs: Base
@@ -541,10 +533,6 @@ jobs:
         cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-    - name: Check space available
-      run: |
-        df -h .
-        df -h /var/lib/docker
 
   Cleanup:
     needs: [Desktop, Labs, Nethunter, Tools, Headless]
