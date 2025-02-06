@@ -719,6 +719,10 @@ jobs:
         sources: |
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-amd64
           ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-arm64
+    - name: Check space available
+      run: |
+        df -h .
+        df -h /var/lib/docker
 
   Cleanup:
     needs: [Desktop, Labs, Merge_Nethunter, Merge_Tools, Merge_Headless]
