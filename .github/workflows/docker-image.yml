@@ -318,9 +318,6 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
-        PLATFORM:
-        - amd64
-        - arm64
     steps:
     - name: Maximize build space
       uses: AdityaGarg8/remove-unwanted-software@v4.1
@@ -359,9 +356,10 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache
+          ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}
+          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}
         tags: |
-          ${{ matrix.KALI_VER }}-nethunter-${{ matrix.PLATFORM }}
+          nethunter
     - name: Build And Push Docker Image
       uses: docker/build-push-action@v5
       with:
@@ -370,7 +368,7 @@ jobs:
         build-args: |
           KALI_VER=${{ matrix.KALI_VER }}
         target: nethunter
-        platforms: linux/${{ matrix.PLATFORM }}
+        platforms: linux/amd64,linux/arm64
         cache-from: ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
         cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
@@ -379,53 +377,6 @@ jobs:
       run: |
         df -h .
         df -h /var/lib/docker
-
-  Merge_Nethunter:
-    needs: Nethunter
-    runs-on: ubuntu-22.04
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Login to GHCR
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-      with:
-        image: ghcr.io/amitie10g/binfmt:latest
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      with:
-        driver-opts: |
-          image=ghcr.io/amitie10g/buildkit:master
-    - name: Merge Nethunter (rolling)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:nethunter
-          ghcr.io/${{ github.repository_owner }}/kali-rolling:nethunter
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-nethunter-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-nethunter-arm64
-    - name: Merge Nethunter (bleeding-edge)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:nethunter
-          ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:nethunter
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-nethunter-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-nethunter-arm64
 
   Tools:
     runs-on: ubuntu-22.04
@@ -465,9 +416,6 @@ jobs:
         - web
         - windows-resources
         - wireless
-        PLATFORM:
-        - amd64
-        - arm64
     steps:
     - name: Maximize build space
       uses: AdityaGarg8/remove-unwanted-software@v4.1
@@ -506,9 +454,10 @@ jobs:
       id: meta
       with:
         images: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache
+          ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}
+          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}
         tags: |
-          ${{ matrix.KALI_VER }}-${{ matrix.TOOL }}-${{ matrix.platform }}
+          ${{ matrix.TOOL }}
     - name: Build And Push Docker Image
       uses: docker/build-push-action@v5
       with:
@@ -517,7 +466,7 @@ jobs:
         build-args: |
           KALI_VER=${{ matrix.KALI_VER }}
         target: tool
-        platforms: linux/${{ matrix.PLATFORM }}
+        platforms: linux/amd64,linux/arm64
         cache-from: ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:latest
         cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
@@ -527,83 +476,6 @@ jobs:
         df -h .
         df -h /var/lib/docker
 
-  Merge_Tools:
-    runs-on: ubuntu-22.04
-    needs: Tools
-    strategy:
-      fail-fast: false
-      matrix:
-        TOOL:
-        - crypto-stego
-        - database
-        - detect
-        - exploitation
-        - forensics
-        - fuzzing
-        - gpu
-        - hardware
-        - identify
-        - information-gathering
-        - passwords
-        - post-exploitation
-        - protect
-        - reporting
-        - respond
-        - reverse-engineering
-        - rfid
-        - sniffing-spoofing
-        - social-engineering
-        - voip
-        - vulnerability
-        - web
-        - windows-resources
-        - wireless
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Login to GHCR
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-      with:
-        image: ghcr.io/amitie10g/binfmt:latest
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      with:
-        driver-opts: |
-          image=ghcr.io/amitie10g/buildkit:master
-    - name: Merge Tools (rolling)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:${{ matrix.TOOL }}
-          ghcr.io/${{ github.repository_owner }}/kali-rolling:${{ matrix.TOOL }}
-        push: true
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-${{ matrix.TOOL }}-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-${{ matrix.TOOL }}-arm64
-    - name: Merge Tools (bleeding-edge)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:${{ matrix.TOOL }}
-          ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:${{ matrix.TOOL }}
-        push: true
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-${{ matrix.TOOL }}-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-${{ matrix.TOOL }}-arm64
-
   Headless:
     needs: Base
     strategy:
@@ -612,9 +484,6 @@ jobs:
         KALI_VER:
         - rolling
         - bleeding-edge
-        PLATFORM:
-          - amd64
-          - arm64
     runs-on: ubuntu-22.04
     steps:
     - name: Maximize build space
@@ -654,10 +523,10 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/kali-cache
-          ghcr.io/${{ github.repository_owner }}/kali-cache
+          ${{ secrets.DOCKERHUB_USERNAME }}/kali-${{ matrix.KALI_VER }}
+          ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}
         tags: |
-          ${{ matrix.KALI_VER }}-headless-${{ matrix.PLATFORM }}
+          headless
     - name: Build And Push Docker Image
       id: build
       uses: docker/build-push-action@v5
@@ -667,66 +536,19 @@ jobs:
         build-args: |
           KALI_VER=${{ matrix.KALI_VER }}
         target: headless
-        platforms: linux/${{ matrix.PLATFORM }}
+        platforms: linux/amd64,linux/arm64
         cache-from: ghcr.io/${{ github.repository_owner }}/kali-${{ matrix.KALI_VER }}:base
         cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-
-  Merge_Headless:
-    needs: Headless
-    runs-on: ubuntu-22.04
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-    - name: Login to GHCR
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-      with:
-        image: ghcr.io/amitie10g/binfmt:latest
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-      with:
-        driver-opts: |
-          image=ghcr.io/amitie10g/buildkit:master
-    - name: Merge Headless (rolling)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/kali-rolling:headless
-          ghcr.io/${{ github.repository_owner }}/kali-rolling:headless
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-headless-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:rolling-headless-arm64
-    - name: Merge Tools (bleeding-edge)
-      uses: int128/docker-manifest-create-action@v2
-      with:
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/kali-bleeding-edge:headless
-          ghcr.io/${{ github.repository_owner }}/kali-bleeding-edge:headless
-        sources: |
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-amd64
-          ghcr.io/${{ github.repository_owner }}/kali-cache:bleeding-edge-headless-arm64
     - name: Check space available
       run: |
         df -h .
         df -h /var/lib/docker
 
   Cleanup:
-    needs: [Desktop, Labs, Merge_Nethunter, Merge_Tools, Merge_Headless]
-    runs-on: ubuntu-22.04
+    needs: [Desktop, Labs, Nethunter, Tools, Headless]
+    runs-on: ubuntu-24.04
     steps:
     - name: Cleanup Docker cache image
       run: |
