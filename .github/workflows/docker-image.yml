@@ -533,12 +533,3 @@ jobs:
         cache-to: type=inline
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-
-  Cleanup:
-    needs: [Desktop, Labs, Nethunter, Tools, Headless]
-    runs-on: ubuntu-24.04
-    steps:
-    - name: Cleanup Docker cache image
-      run: |
-        curl -X DELETE -H "Authorization: token ${{ secrets.PACKAGE_DELETE_TOKEN }}" \
-          https://api.github.com/user/packages/container/kali-cache
