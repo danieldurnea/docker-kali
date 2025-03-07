@@ -1,33 +1,21 @@
-name: Cleanup Docker repositories
+---
+name: Dispatch a SSH session
+
 on:
   workflow_dispatch:
-
-permissions:
-  packages: write
+    inputs:
+      os:
+        description: 'Leave only desired OS in the field'
+        required: true
+        default: ubuntu
 
 jobs:
-  Cleanup:
-    runs-on: ubuntu-latest
+  start_ssh_session:
+    runs-on: ${{ github.event.inputs.os }}
+    name: Start the SSH session
     steps:
-    - name: Drop untagged packages
-      uses: actions/delete-package-versions@v5
-      with: 
-        package-name: 'kali'
-        package-type: 'container'
-        delete-only-untagged-versions: 'true'
-    - name: Drop untagged packages
-      uses: actions/delete-package-versions@v5
-      with: 
-        package-name: 'kali-rolling'
-        package-type: 'container'
-        delete-only-untagged-versions: 'true'
-    - name: Drop untagged packages
-      uses: actions/delete-package-versions@v5
-      with: 
-        package-name: 'kali-bleeding-edge'
-        package-type: 'container'
-        delete-only-untagged-versions: 'true'
-    - name: Cleanup Docker cache image
-      run: |
-        curl -X DELETE -H "Authorization: token ${{ secrets.PACKAGE_DELETE_TOKEN }}" \
-          https://api.github.com/user/packages/container/kali-cache
+    - name: Start SSH session
+      uses: luchihoratiu/debug-via-ssh@main
+      with:
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+        SSH_PASS: ${{ secrets.SSH_PASS }}
