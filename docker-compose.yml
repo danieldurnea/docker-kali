@@ -12,10 +12,4 @@ services:
       - ./kali/kali:/home/kali
       - ./kali/root:/root
 
-  vulnerable-webapps:
-    container_name: vulnerable
-    image: ghcr.io/amitie10g/kali-rolling:labs
-    restart: always
-    ports:
-      - 42000:42000
-      - 42001:42001
+  
